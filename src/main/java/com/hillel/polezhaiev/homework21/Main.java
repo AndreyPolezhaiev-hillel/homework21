@@ -1,28 +1,28 @@
 package com.hillel.polezhaiev.homework21;
 
-import com.hillel.polezhaiev.homework21.homeworkservice.HomeworkService;
-import com.hillel.polezhaiev.homework21.lessonservice.LessonDao;
-import com.hillel.polezhaiev.homework21.lessonservice.LessonService;
+import com.hillel.polezhaiev.homework21.repo.HomeworkDaoImpl;
+import com.hillel.polezhaiev.homework21.repo.HomeworkDao;
+import com.hillel.polezhaiev.homework21.repo.LessonDaoImpl;
+import com.hillel.polezhaiev.homework21.repo.LessonDao;
 import com.hillel.polezhaiev.homework21.model.Homework;
 import com.hillel.polezhaiev.homework21.model.Lesson;
-import com.hillel.polezhaiev.homework21.repo.DataBase;
-import com.hillel.polezhaiev.homework21.repo.DataBaseConnection;
+import com.hillel.polezhaiev.homework21.repo.db.DataBaseConnection;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws Exception {
         String username = System.getenv("MYSQL_USER");
         String password = System.getenv("MYSQL_PASSWORD");
+        String url = "jdbc:mysql://127.0.0.1:3306/homework_hillel";
 
-        DataBase dataBase = new DataBaseConnection(username, password);
+        DataBaseConnection dataBase = new DataBaseConnection(url, username, password);
 
         Homework homework1 = new Homework(1, "homeworkMath", "count: 5 + 5");
         Homework homework2 = new Homework(2, "homeworkLiterature", "read a book");
         Homework homework3 = new Homework(3, "homeworkSport", "work out 5 minutes");
 
-        HomeworkService homeworkService = new HomeworkService(dataBase);
+        HomeworkDao homeworkService = new HomeworkDaoImpl(dataBase);
 
 //        homeworkService.addHomework(homework1);
 //        homeworkService.addHomework(homework2);
@@ -32,7 +32,7 @@ public class Main {
         Lesson lesson2 = new Lesson(2, "Literature", homework2);
         Lesson lesson3 = new Lesson(3, "Sport", homework3);
 
-        LessonService lessonService = new LessonDao(dataBase);
+        LessonDao lessonService = new LessonDaoImpl(dataBase);
 
 //        lessonService.addLesson(null);
 //        lessonService.addLesson(lesson2);
@@ -46,13 +46,14 @@ public class Main {
         System.out.println(lessonById3);
 
         System.out.println();
-//        lessonService.deleteLesson(lesson3);
+        lessonService.deleteLesson(lesson2);
 
         System.out.println();
         for (Lesson lesson: lessonService.getLessons()) {
             System.out.println(lesson);
         }
 
+        dataBase.close();
         System.out.println();
     }
 }

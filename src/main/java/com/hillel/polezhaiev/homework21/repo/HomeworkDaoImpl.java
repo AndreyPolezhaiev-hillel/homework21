@@ -1,16 +1,16 @@
-package com.hillel.polezhaiev.homework21.homeworkservice;
+package com.hillel.polezhaiev.homework21.repo;
 
 import com.hillel.polezhaiev.homework21.model.Homework;
-import com.hillel.polezhaiev.homework21.repo.DataBase;
+import com.hillel.polezhaiev.homework21.repo.db.DataBaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class HomeworkService {
-    private DataBase dataBase;
+public class HomeworkDaoImpl implements HomeworkDao {
+    private DataBaseConnection dataBase;
 
-    public HomeworkService(DataBase dataBase) {
+    public HomeworkDaoImpl(DataBaseConnection dataBase) {
         this.dataBase = dataBase;
     }
 
@@ -23,7 +23,8 @@ public class HomeworkService {
         String sql =  "INSERT INTO homework(name, description)"
                     + " VALUES(?, ?)";
 
-        try(Connection connection = dataBase.getConnection()) {
+        try {
+            Connection connection = dataBase.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, homework.getName());
             preparedStatement.setString(2, homework.getDescription());

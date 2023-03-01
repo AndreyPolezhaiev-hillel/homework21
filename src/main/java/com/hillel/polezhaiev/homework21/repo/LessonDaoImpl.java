@@ -1,8 +1,8 @@
-package com.hillel.polezhaiev.homework21.lessonservice;
+package com.hillel.polezhaiev.homework21.repo;
 
 import com.hillel.polezhaiev.homework21.model.Homework;
 import com.hillel.polezhaiev.homework21.model.Lesson;
-import com.hillel.polezhaiev.homework21.repo.DataBase;
+import com.hillel.polezhaiev.homework21.repo.db.DataBaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LessonDao implements LessonService{
+public class LessonDaoImpl implements LessonDao {
 
-    private DataBase dataBase;
+    private DataBaseConnection dataBase;
     private List<Lesson> lessonList = new LinkedList<>();
 
-    public LessonDao(DataBase dataBase) {
+    public LessonDaoImpl(DataBaseConnection dataBase) {
         this.dataBase = dataBase;
     }
 
@@ -31,7 +31,8 @@ public class LessonDao implements LessonService{
         String sql =  " INSERT INTO lesson(name, updatedAt, homework_id)"
                     + " VALUES(?, ?, ?)";
 
-        try(Connection connection = dataBase.getConnection()) {
+        try {
+            Connection connection = dataBase.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, lesson.getName());
@@ -56,7 +57,8 @@ public class LessonDao implements LessonService{
 
         String sql = "DELETE FROM lesson WHERE name = ?";
 
-        try(Connection connection = dataBase.getConnection()) {
+        try {
+            Connection connection = dataBase.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, lesson.getName());
@@ -85,7 +87,8 @@ public class LessonDao implements LessonService{
         String sqlLesson = "SELECT * FROM lesson WHERE id = ?";
         String sqlHomework = "SELECT * FROM homework WHERE id = ?";
 
-        try(Connection connection = dataBase.getConnection()) {
+        try{
+            Connection connection = dataBase.getConnection();
             PreparedStatement statementLesson = connection.prepareStatement(sqlLesson);
 
             statementLesson.setInt(1, lessonId);

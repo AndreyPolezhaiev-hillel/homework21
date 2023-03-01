@@ -1,10 +1,10 @@
-package com.hillel.polezhaiev.homework21.lessonservice;
+package com.hillel.polezhaiev.homework21.repo;
 
 import com.hillel.polezhaiev.homework21.model.Lesson;
 
 import java.util.List;
 
-public interface LessonService {
+public interface LessonDao {
     void addLesson(Lesson lesson);
     void deleteLesson(Lesson lesson);
     List<Lesson> getLessons();
