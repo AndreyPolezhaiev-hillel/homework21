@@ -7,6 +7,7 @@ import com.hillel.polezhaiev.homework21.repo.LessonDao;
 import com.hillel.polezhaiev.homework21.model.Homework;
 import com.hillel.polezhaiev.homework21.model.Lesson;
 import com.hillel.polezhaiev.homework21.repo.db.DataBaseConnection;
+import org.w3c.dom.ls.LSOutput;
 
 import java.sql.SQLException;
 
@@ -38,8 +39,8 @@ public class Main {
 //        lessonService.addLesson(lesson2);
 //        lessonService.addLesson(lesson3);
 
-        Lesson lessonById1 = lessonService.getLessonById(3);
-        Lesson lessonById2 = lessonService.getLessonById(4);
+        Lesson lessonById1 = lessonService.getLessonById(9);
+        Lesson lessonById2 = lessonService.getLessonById(11);
         Lesson lessonById3 = lessonService.getLessonById(2);
         System.out.println(lessonById1);
         System.out.println(lessonById2);
@@ -54,6 +55,5 @@ public class Main {
         }
 
         dataBase.close();
-        System.out.println();
     }
 }

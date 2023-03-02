@@ -84,12 +84,13 @@ public class LessonDaoImpl implements LessonDao {
             return null;
         }
 
-        String sqlLesson = "SELECT * FROM lesson WHERE id = ?";
-        String sqlHomework = "SELECT * FROM homework WHERE id = ?";
-
+        String sql = " SELECT * FROM lesson"
+                    +" JOIN homework"
+                    +" ON lesson.homework_id = homework.id"
+                    +" WHERE lesson.id = ?";
         try{
             Connection connection = dataBase.getConnection();
-            PreparedStatement statementLesson = connection.prepareStatement(sqlLesson);
+            PreparedStatement statementLesson = connection.prepareStatement(sql);
 
             statementLesson.setInt(1, lessonId);
             statementLesson.execute();
@@ -103,7 +104,9 @@ public class LessonDaoImpl implements LessonDao {
                 lesson.setName(resultSetLesson.getString("name"));
                 lesson.setHomeworkId(resultSetLesson.getInt("homework_id"));
 
-                PreparedStatement statementHomework = connection.prepareStatement(sqlHomework);
+                String hmw = "SELECT * FROM homework WHERE id = ?";
+
+                PreparedStatement statementHomework = connection.prepareStatement(hmw);
                 statementHomework.setInt(1, lesson.getHomeworkId());
                 statementHomework.execute();
 
@@ -134,3 +137,62 @@ public class LessonDaoImpl implements LessonDao {
     }
 
 }
+
+
+//    @Override
+//    public Lesson getLessonById(Integer lessonId) {
+//        if(lessonId == null){
+//            System.out.println("paramater getLessonById was null");
+//            return null;
+//        }
+//
+//        String sqlLesson = "SELECT * FROM lesson WHERE id = ?";
+//        String sqlHomework = "SELECT * FROM homework WHERE id = ?";
+//
+//        try{
+//            Connection connection = dataBase.getConnection();
+//            PreparedStatement statementLesson = connection.prepareStatement(sqlLesson);
+//
+//            statementLesson.setInt(1, lessonId);
+//            statementLesson.execute();
+//
+//            ResultSet resultSetLesson = statementLesson.getResultSet();
+//
+//
+//            if(resultSetLesson.next()){
+//                Lesson lesson = new Lesson();
+//                lesson.setId(resultSetLesson.getInt("id"));
+//                lesson.setName(resultSetLesson.getString("name"));
+//                lesson.setHomeworkId(resultSetLesson.getInt("homework_id"));
+//
+//                PreparedStatement statementHomework = connection.prepareStatement(sqlHomework);
+//                statementHomework.setInt(1, lesson.getHomeworkId());
+//                statementHomework.execute();
+//
+//                ResultSet resultSetHomework = statementHomework.getResultSet();
+//                resultSetHomework.next();
+//
+//                Homework homework = new Homework();
+//                homework.setId(resultSetHomework.getInt("id"));
+//                homework.setName(resultSetHomework.getString("name"));
+//                homework.setDescription(resultSetHomework.getString("description"));
+//
+//                lesson.setHomework(homework);
+//                return lesson;
+//
+//            } else {
+//                Lesson lesson = new Lesson();
+//                lesson.setId(null);
+//                lesson.setName(null);
+//                lesson.setHomework(null);
+//                lesson.setHomeworkId(null);
+//
+//                return lesson;
+//            }
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+
